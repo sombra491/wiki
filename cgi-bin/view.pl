@@ -44,6 +44,12 @@ sub hh{
 	my $h3;
 	my $h2;
 	my $h1;
+	my $status;
+	my $add;
+	my $commit;
+	my $clone;
+	my $checkout;
+	my $init;
 	$h6= substr($operacion,0,6);
 	$h5= substr($operacion,0,5);
 	$h4= substr($operacion,0,4);
@@ -56,6 +62,21 @@ sub hh{
 	elsif($h3 eq "###"){$operacion="<h3>".substr($operacion,3)."</h3>";}
 	elsif($h2 eq "##"){$operacion="<h2>".substr($operacion,2)."</h2>";}
 	elsif($h1 eq "#"){$operacion="<h1>".substr($operacion,1)."</h1>";}
+	elsif($h3 eq "git"){
+		$status=substr($operacion,4,6);
+		$add=substr($operacion,4,3);
+		$clone=substr($operacion,4,5);
+		$checkout=substr($operacion,4,8);
+		$init=substr($operacion,4,4);
+		if ($status eq "status"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($add eq "add"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($status eq "commit"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($clone eq "clone"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($checkout eq "checkout"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($init eq "init"){$operacion="<p><code>".$operacion."</code></p>";}
+		elsif($init eq "push"){$operacion="<p><code>".$operacion."</code></p>";}
+		else {$operacion="<p>".$operacion."</p>";}
+		}
 	else {$operacion="<p>".$operacion."</p>";}
 	return $operacion;	
 }
@@ -169,6 +190,9 @@ my $diferencia2;
 if($cadenaBuscadora>1){
 	$inicio=rindex($html,"[",$finalcorchete);
 	$final=index($html,")",$inicioParantesis);
+	if($inicio==-1){}
+	elsif($final==-1){}
+	else{
 	$izquierda=substr($html,0,$inicio);
 	$inicio=$inicio+1;
 	$diferencia1=$finalcorchete-$inicio;
@@ -178,7 +202,7 @@ if($cadenaBuscadora>1){
 	$centro2=substr($html,$inicioParantesis,$diferencia2);
 	$final=$final+1;
 	$derecho=substr($html,$final);
-	$html=$izquierda.' <a href ="'.$centro1.'" >'.$centro2.'</a> '.$derecho;
+	$html=$izquierda.' <a href ="'.$centro2.'" >'.$centro1.'</a> '.$derecho;}
 }
 return $html;	
 }
