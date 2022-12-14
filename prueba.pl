@@ -1,65 +1,30 @@
 my $html=<STDIN>;
 
-my $cadenaBuscadora= split("\\*\\*\\*",$html);
-my $indiceInicio=index($html,"***");
+my $cadenaBuscadora= split("\\]\\(",$html);
+my $finalcorchete=index($html,"]");
+my $inicioParantesis=index($html,"(");
 my $i=0;
 my $inicio;
 my $final;
-my $central;
 my $izquierda;
-my $derecha;
-my $diferencia;
-##3***
-$cadenaBuscadora=$cadenaBuscadora-2;
-	if($indiceInicio>=2){
-		while($i<$cadenaBuscadora){
-			##separacion de datos
-			$inicio=index($html,"***");
-			$final=index($html,"***",($inicio+1));
-			if($inicio==-1){last;}
-			if($final==-1){last;}
-			if($inicio==$final){last;}
-			##izquierda
-			$izquierda=substr($html,0,$inicio);
-			$inicio=$inicio+3;
-			$diferencia=$final-$inicio;
-			$final=$final+3;
-			##derecha
-			$derecha=substr($html,$final);
-			##central
-			$central=substr($html,$inicio,$diferencia);
-			$central="<strong><em>".$central."</em></strong>";
-			$html=$izquierda.$central.$derecha;
-		$i++;
-		}
-		
-	}	
-##2**	
-	$cadenaBuscadora= split("\\*\\*",$html);
-	$indiceInicio=index($html,"**");
-	$i=0;
-	$cadenaBuscadora=$cadenaBuscadora-2;
-	if($indiceInicio>=2){
-		while($i<$cadenaBuscadora){
-			##separacion de datos
-			$inicio=index($html,"**");
-			$final=index($html,"**",($inicio+1));
-			if($inicio==-1){last;}
-			if($final==-1){last;}
-			if($inicio==$final){last;}
-			##izquierda
-			$izquierda=substr($html,0,$inicio);
-			$inicio=$inicio+2;
-			$diferencia=$final-$inicio;
-			$final=$final+2;
-			##derecha
-			$derecha=substr($html,$final);
-			##central
-			$central=substr($html,$inicio,$diferencia);
-			$central="<strong>".$central."</strong>";
-			$html=$izquierda.$central.$derecha;
-		$i++;
-		}
-		
-	}	
+my $derecho;
+my $centro1;
+my $centro2;
+my $diferencia1;
+my $diferencia2;
+if($cadenaBuscadora>=1){
+	$inicio=rindex($html,"[",$finalcorchete);
+	$final=index($html,")",$inicioParantesis);
+	$izquierda=substr($html,0,$inicio);
+	$inicio=$inicio+1;
+	$diferencia1=$finalcorchete-$inicio;
+	$centro1=substr($html,$inicio,$diferencia1);
+	$inicioParantesis=$inicioParantesis+1;
+	$diferencia2=$final-$inicioParantesis;
+	$centro2=substr($html,$inicioParantesis,$diferencia2);
+	$final=$final+1;
+	$derecho=substr($html,$final);
+	$html=$izquierda.'<a href ="'.$centro2.'" >'.$centro1.'</a>'.$derecho;
+}
+
 	print "$html";	

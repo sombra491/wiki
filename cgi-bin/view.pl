@@ -26,8 +26,10 @@ else{}
 sub listado{
 	open(ARCHIVO,'<',"../subwiki/$nombre");
 	while(<ARCHIVO>)               
-	{      
-	$_=&hh($_);
+	{
+	$_=&ref($_);	
+	$_=&sin($_);		
+	$_=&hh($_);	
 	$prueba=$prueba.$_;                  
 	}   
 	close(ARCHIVO);
@@ -57,6 +59,129 @@ sub hh{
 	else {$operacion="<p>".$operacion."</p>";}
 	return $operacion;	
 }
+## metodo sin 
+sub sin{
+my ($html)=@_;
+my $cadenaBuscadora= split("\\*\\*\\*",$html);
+my $indiceInicio=index($html,"***");
+my $i=0;
+my $inicio;
+my $final;
+my $central;
+my $izquierda;
+my $derecha;
+my $diferencia;
+##3***
+	if($indiceInicio>=0){
+		while($i<$cadenaBuscadora){
+			##separacion de datos
+			$inicio=index($html,"***");
+			$final=index($html,"***",($inicio+1));
+			if($inicio==-1){last;}
+			if($final==-1){last;}
+			if($inicio==$final){last;}
+			##izquierda
+			$izquierda=substr($html,0,$inicio);
+			$inicio=$inicio+3;
+			$diferencia=$final-$inicio;
+			$final=$final+3;
+			##derecha
+			$derecha=substr($html,$final);
+			##central
+			$central=substr($html,$inicio,$diferencia);
+			$central="<strong><em>".$central."</em></strong>";
+			$html=$izquierda.$central.$derecha;
+		$i++;
+		
+		}
+		
+	}
+##2**	
+	$cadenaBuscadora= split("\\*\\*",$html);
+	$indiceInicio=index($html,"**");
+	$i=0;
+	if($indiceInicio>=0){
+		while($i<$cadenaBuscadora){
+			##separacion de datos
+			$inicio=index($html,"**");
+			$final=index($html,"**",($inicio+1));
+			if($inicio==-1){last;}
+			if($final==-1){last;}
+			if($inicio==$final){last;}
+			##izquierda
+			$izquierda=substr($html,0,$inicio);
+			$inicio=$inicio+2;
+			$diferencia=$final-$inicio;
+			$final=$final+2;
+			##derecha
+			$derecha=substr($html,$final);
+			##central
+			$central=substr($html,$inicio,$diferencia);
+			$central="<strong>".$central."</strong>";
+			$html=$izquierda.$central.$derecha;
+		$i++;
+		}
+		
+	}	
+##1*	
+	$cadenaBuscadora= split("\\*",$html);
+	$indiceInicio=index($html,"*");
+	$i=0;
+	if($indiceInicio>=0){
+		while($i<$cadenaBuscadora){
+			##separacion de datos
+			$inicio=index($html,"*");
+			$final=index($html,"*",($inicio+1));
+			if($inicio==-1){last;}
+			if($final==-1){last;}
+			if($inicio==$final){last;}
+			##izquierda
+			$izquierda=substr($html,0,$inicio);
+			$inicio=$inicio+1;
+			$diferencia=$final-$inicio;
+			$final=$final+1;
+			##derecha
+			$derecha=substr($html,$final);
+			##central
+			$central=substr($html,$inicio,$diferencia);
+			$central="<em>".$central."</em>";
+			$html=$izquierda.$central.$derecha;
+		$i++;
+		}	
+	}
+return $html;	
+}
+##metodo ref
+sub ref{
+my ($html)=@_;
+my $cadenaBuscadora= split("\\]\\(",$html);
+my $finalcorchete=index($html,"]");
+my $inicioParantesis=index($html,"(");
+my $i=0;
+my $inicio;
+my $final;
+my $izquierda;
+my $derecho;
+my $centro1;
+my $centro2;
+my $diferencia1;
+my $diferencia2;
+if($cadenaBuscadora>1){
+	$inicio=rindex($html,"[",$finalcorchete);
+	$final=index($html,")",$inicioParantesis);
+	$izquierda=substr($html,0,$inicio);
+	$inicio=$inicio+1;
+	$diferencia1=$finalcorchete-$inicio;
+	$centro1=substr($html,$inicio,$diferencia1);
+	$inicioParantesis=$inicioParantesis+1;
+	$diferencia2=$final-$inicioParantesis;
+	$centro2=substr($html,$inicioParantesis,$diferencia2);
+	$final=$final+1;
+	$derecho=substr($html,$final);
+	$html=$izquierda.' <a href ="'.$centro1.'" >'.$centro2.'</a> '.$derecho;
+}
+return $html;	
+}
 ##imprimir html
 print "Content-type: text/html\n\n";
 print <<ENDHTML;
@@ -69,8 +194,7 @@ print <<ENDHTML;
 </head>
 <body>
 $prueba
-
-<a href="../index.html">regresar al pricipio</a>
+<a href="list.pl">regresar a la lista</a>
 </body>
 </html>
 ENDHTML

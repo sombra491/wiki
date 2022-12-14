@@ -26,7 +26,7 @@ sub listado{
 	open(ARCHIVO,'<',"../subwiki/$nombre");
 	while(<ARCHIVO>)               
 	{        
-	$prueba=$prueba."\n".$_;                  
+	$prueba=$prueba.$_;                  
 	}   
 	close(ARCHIVO);
 	return $prueba;
@@ -46,6 +46,7 @@ print <<ENDHTML;
 	<form method=GET action="./new.pl">
 			<h4> $title</h4> 
 			<input type=hidden name=titulo size=30 maxlength=30 value=$title style="height: 30px;">
+			<input type=hidden name=edit size=30 maxlength=30 value="true" style="height: 30px;">
 			<br>
 			<textarea name=contenido rows="20" cols="60" >$prueba</textarea>
 			<br>
