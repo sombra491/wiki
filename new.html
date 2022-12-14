@@ -1,0 +1,21 @@
+<html>
+<head>
+ 	<!-- La cabecera del index-->
+	<meta charset="utf-8"> 	
+	<title>Wiki</title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+<h1>Crea una nueva pagina </h1>
+	<form method=GET action="cgi-bin/new.pl">
+			<h4> Titulo</h4> 
+			<input type=text name=titulo size=30 maxlength=30 value="" style="height: 30px;" required>
+			<br>
+			<br>
+			<textarea name=contenido rows="20" cols="60"></textarea>
+			<br>
+			<input type=submit value="guardar" style="height: 30px;">
+			</form>
+<h4><a href="index.html">Cancelar</a></h4>
+</body>
+</html>
